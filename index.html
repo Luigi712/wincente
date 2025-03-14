@@ -4,9 +4,25 @@
     <title>Word Guessing Game</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { font-family: 'Arial', sans-serif; text-align: center; background: #f4f4f4; padding: 20px; }
-        h1 { color: #333; }
-        #game-container { display: none; margin-top: 20px; }
+        body { 
+            font-family: 'Arial', sans-serif; 
+            text-align: center; 
+            background: #f4f4f4; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 { 
+            color: #333; 
+            display: none; /* Nasconde il titolo */
+        }
+        #game-container { 
+            display: none; 
+            margin-top: 20px; 
+        }
         button { 
             margin: 10px; 
             padding: 15px 25px; 
@@ -16,16 +32,39 @@
             border-radius: 10px; 
             color: #fff; 
         }
-        #start-button { background-color: #4CAF50; }
-        #correct-button { background-color: #4CAF50; }
-        #pass-button { background-color: #FFC107; }
-        #wrong-button { background-color: #F44336; }
-        #word { font-size: 32px; margin: 20px; font-weight: bold; color: #333; }
-        #timer, #score { font-size: 20px; margin-top: 10px; color: #555; }
+        #start-button { 
+            background-color: #4CAF50; 
+            font-size: 24px; 
+            padding: 20px 40px; 
+        }
+        #correct-button { 
+            background-color: #4CAF50; 
+        }
+        #pass-button { 
+            background-color: #FFC107; 
+        }
+        #wrong-button { 
+            background-color: #F44336; 
+        }
+        #word { 
+            font-size: 48px; 
+            margin: 20px; 
+            font-weight: bold; 
+            color: #333; 
+        }
+        #timer, #score { 
+            font-size: 20px; 
+            margin-top: 10px; 
+            color: #555; 
+        }
+        #passes-left { 
+            font-size: 18px; 
+            margin-top: 10px; 
+            color: #555; 
+        }
     </style>
 </head>
 <body>
-    <h1>Word Guessing Game</h1>
     <button id="start-button">Start</button>
     <div id="game-container">
         <div id="word">Ready?</div>
