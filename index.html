@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Word Guessing Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: 'Arial', sans-serif; text-align: center; background: #f4f4f4; padding: 20px; }
+        h1 { color: #333; }
+        #game-container { display: none; margin-top: 20px; }
+        button { 
+            margin: 10px; 
+            padding: 15px 25px; 
+            font-size: 20px; 
+            cursor: pointer; 
+            border: none; 
+            border-radius: 10px; 
+            color: #fff; 
+        }
+        #start-button { background-color: #4CAF50; }
+        #correct-button { background-color: #4CAF50; }
+        #pass-button { background-color: #FFC107; }
+        #wrong-button { background-color: #F44336; }
+        #word { font-size: 32px; margin: 20px; font-weight: bold; color: #333; }
+        #timer, #score { font-size: 20px; margin-top: 10px; color: #555; }
+    </style>
+</head>
+<body>
+    <h1>Word Guessing Game</h1>
+    <button id="start-button">Start</button>
+    <div id="game-container">
+        <div id="word">Ready?</div>
+        <button id="correct-button">✅ Indovinata</button>
+        <button id="pass-button">⏭️ Passo</button>
+        <button id="wrong-button">❌ Sbagliata</button>
+        <div id="timer">Tempo: 60</div>
+        <div id="score">Punteggio: 0</div>
+        <div id="passes-left">Passi rimasti: 3</div>
+    </div>
+
+    <script>
+        let score = 0;
+        let timeLeft = 60;
+        let currentWordIndex = 0;
+        let timerInterval;
+        let passesLeft = 3; // Limite di passi
+
+        const startButton = document.getElementById('start-button');
+        const gameContainer = document.getElementById('game-container');
+        const wordDisplay = document.getElementById('word');
+        const timerDisplay = document.getElementById('timer');
+        const scoreDisplay = document.getElementById('score');
+        const correctButton = document.getElementById('correct-button');
+        const passButton = document.getElementById('pass-button');
+        const wrongButton = document.getElementById('wrong-button');
+        const passesLeftDisplay = document.getElementById('passes-left');
+
+        // Parole codificate in Base64
+        let words = [
+            "Y2FzYQ==", // casa
+            "YWxiZXJv", // albero
+            "c29sZQ==", // sole
+            "bHVuYQ==", // luna
+            "bWFyZQ==", // mare
+            "bW9udGFnbmE=", // montagna
+            "Z2F0dG8=", // gatto
+            "Y2FuZQ==", // cane
+            "cGl6emE=", // pizza
+            "Z2VsYXRv", // gelato
+            // Aggiungi altre parole codificate qui...
+        ];
+
+        // Funzione per mescolare l'array delle parole in modo casuale
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Scambia gli elementi
+            }
+        }
+
+        startButton.addEventListener('click', () => {
+            startButton.style.display = 'none';
+            gameContainer.style.display = 'block';
+            score = 0;
+            timeLeft = 60;
+            currentWordIndex = 0;
+            passesLeft = 3; // Resetta i passi all'inizio di ogni round
+            updateScore();
+            updatePasses();
+            shuffleArray(words);  // Mescola le parole all'inizio del gioco
+            nextWord();
+            startTimer();
+        });
+
+        correctButton.addEventListener('click', () => { score++; nextWord(); });
+        passButton.addEventListener('click', () => { 
+            if (passesLeft > 0) { 
+                passesLeft--; 
+                updatePasses(); 
+                nextWord(); 
+            } else {
+                alert("Hai esaurito i passi disponibili!");
+            }
+        });
+        wrongButton.addEventListener('click', () => { score--; nextWord(); });
+
+        function nextWord() {
+            if (words.length > 0 && currentWordIndex < words.length) {
+                // Decodifica la parola corrente
+                let decodedWord = atob(words[currentWordIndex]); // Decodifica in Base64
+                wordDisplay.textContent = decodedWord;
+                currentWordIndex++;
+            } else {
+                wordDisplay.textContent = "Nessuna parola trovata";
+            }
+            updateScore();
+        }
+
+        function updateScore() {
+            scoreDisplay.textContent = `Punteggio: ${score}`;
+        }
+
+        function updatePasses() {
+            passesLeftDisplay.textContent = `Passi rimasti: ${passesLeft}`;
+            if (passesLeft === 0) {
+                passButton.disabled = true; // Disabilita il pulsante "Passo" se i passi sono finiti
+            } else {
+                passButton.disabled = false;
+            }
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = `Tempo: ${timeLeft}`;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function endGame() {
+            alert(`Tempo scaduto! Punteggio finale: ${score}`);
+            startButton.style.display = 'block';
+            gameContainer.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
